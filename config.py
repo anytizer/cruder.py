@@ -1,7 +1,7 @@
-database_file = "database.db"
+database_file = "database/database.db"
 
 # table, prefix, name, hidden=[], list view cols=[]
-cruds = [
+cruds = (
     ("artworks", "artwork_", "Artworks", ["project_id"], ["accept"]),
     ("customers", "customer_", "Customers", [], ["accept"]),
     ("developers", "developer_", "Developers", [], []),
@@ -11,6 +11,9 @@ cruds = [
     ("terminations", "termination_", "Terminations", ['project_id'], []),
     ("works", "work_", "Works", [], []),
     ("info", "info_", "Information", [], []),
-]
+)
 
-# each table has exactly one PK ID
+# Considerations
+# Each table has exactly one PK ID
+# Foreign Keys are handled at the database level
+# run www.py as flask
