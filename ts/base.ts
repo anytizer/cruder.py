@@ -14,7 +14,7 @@
 <body class='w3-sand'>
 
     <div class='w3-container w3-blue'>
-        <h1>Urgent Slicing - {% block heading %}{% endblock %}</h1>
+        <h1>Pymin Panel - {% block heading %}{% endblock %}</h1>
     </div>
 
     <div id="menus" class="w3-padding w3-amber w3-bottombar w3-border-red">
