@@ -8,6 +8,9 @@ class database:
     def __init__(self):
         self.connection = sqlite3.connect(config.database_file)
         self.connection.row_factory = sqlite3.Row
+        self.connection.execute("PRAGMA encoding = 'UTF-8';")
+        self.connection.execute("PRAGMA count_changes = ON;")
+        self.connection.execute("PRAGMA foreign_keys = ON;")
 
     def __del__(self):
         self.connection.commit()
