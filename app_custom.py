@@ -23,6 +23,11 @@ class exporter(database):
                 pass
         return "\r\n".join(_csv)
 
+    def report(self, _v_view_table="reports"):
+        db = database()
+        records = db.query(f"SELECT * FROM `{_v_view_table}`")
+        return records
+
 
 @bp.route("/")
 def index():
@@ -35,4 +40,13 @@ def csv_index(table):
     csv = e.export(table)
     response = Response(csv, mimetype='text/csv')
     response.headers.set("Content-Disposition", "attachment", filename=f"{table}.csv")
+    return response
+
+
+@bp.route("/report/<table>/", methods=["GET"])
+def report(table):
+    e = exporter()
+    reports = e.report(table)
+    print(reports)
+    response = render_template("report.html", reports=reports)
     return response
