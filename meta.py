@@ -43,10 +43,10 @@ def headname(column="", prefix=""):
 
 
 def href(table="", field={}, pk_id=""):
-    # url = "/close/<>"
-    field['url'] = field['url'].lower().lstrip("/")
+    # "/close/<>" => "/table/close/{{data.pk_id}}"
+    # field['url'] = field['url'].lower().lstrip("/")
     field['url'] = field['url'].replace("/<>", f"/{{{{ data.{pk_id} }}}}")
-    field['url'] = "/" + table + "/" + field['url']
+    # field['url'] = "/" + table + "/" + field['url']
     link = f"<a class='w3-btn w3-purple' href='{field['url']}'>{headname(field['column'])}</a>"
     return link
 

@@ -12,9 +12,14 @@ class entity_{table}(database):
         super().__init__()
         self.table = table
 
-    def list(self):
+    def list(self, child_id=""):
+        filters = ()
         select_query = "SELECT * FROM `{table}`;"
-        data = self.query(select_query)
+        if child_id:
+            filters = (child_id,)
+            select_query = "SELECT * FROM `{table}` WHERE `child_id`=?;"
+
+        data = self.query(select_query, filters)
         return data
 
     def add(self, data=[]):

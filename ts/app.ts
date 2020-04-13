@@ -13,10 +13,11 @@ def {table}_index():
     return redirect("/{table}/list")
 
 
-@bp.route("/{table}/list/", methods=["GET"])
-def {table}_list():
+@bp.route("/{table}/list/", methods=["GET"], defaults={'child_id': None})
+@bp.route("/{table}/list/<child_id>/", methods=["GET"])
+def {table}_list(child_id):
     entity = entity_{table}()
-    data = entity.list()
+    data = entity.list(child_id)
     return render_template("/{table}/list.html", data=data)
 
 
