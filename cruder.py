@@ -4,7 +4,7 @@ import meta
 from meta import encrypt
 
 
-def routes_body(table="", columns="", prefix="", hidden=(), extras=(), pk_id=""):
+def routes_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     lookups = "".join([f"""
         kv_{h['column']}s_sql = "{h['sql']}"
         {h['column']}s = entity.query(kv_{h['column']}s_sql, ())
@@ -19,8 +19,8 @@ def routes_body(table="", columns="", prefix="", hidden=(), extras=(), pk_id="")
     meta.write(f"apps/app_{table}.py", routes)
 
 
-def entity_body(table="", columns="", prefix="", hidden=(), extras=(), pk_id=""):
-    def _insert(columns=[]):
+def entity_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
+    def _insert(columns=()) -> str:
         insert_fields = ", ".join([f"`{field}`" for field in columns])
         insert_data = ", ".join([f":{encrypt(field)}" for field in columns])
 
@@ -32,7 +32,7 @@ def entity_body(table="", columns="", prefix="", hidden=(), extras=(), pk_id="")
             );"""
         return insert_sql
 
-    def _update(columns=[]):
+    def _update(columns=()):
         update_fields = ", ".join([f"`{field}`=:{encrypt(field)}" for field in columns])
         update_sql = f"""UPDATE `{table}` SET {update_fields} WHERE `{pk_id}`=:{pk_id};"""
         return update_sql
@@ -48,7 +48,7 @@ def entity_body(table="", columns="", prefix="", hidden=(), extras=(), pk_id="")
     meta.write(f"entities/entity_{table}.py", entity_template)
 
 
-def list_form(table="", columns="", prefix="", hidden=(), extras=(), pk_id=""):
+def list_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_id")]
     columns = [column for column in columns if not column.endswith("_active")]
     columns = [column for column in columns if not column.endswith("_password")]
@@ -69,7 +69,7 @@ def list_form(table="", columns="", prefix="", hidden=(), extras=(), pk_id=""):
     meta.write(f"templates/{table}/list.html", list_html)
 
 
-def add_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""):
+def add_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_id")]
     # columns = [column for column in columns if not column.endswith("_active")]
     # columns = [column for column in columns if not column.endswith("_password")]
@@ -104,7 +104,7 @@ def add_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""):
     meta.write(f"templates/{table}/add.html", add_form_html)
 
 
-def edit_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""):
+def edit_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_id")]
     htmls_edit = "".join([f"""
         <div class='w3-padding w3-row'>
@@ -119,7 +119,7 @@ def edit_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""):
     meta.write(f"templates/{table}/edit.html", edit_html)
 
 
-def details_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""):
+def details_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_id")]
     columns = [column for column in columns if not column.endswith("_active")]
     columns = [column for column in columns if not column.endswith("_password")]
@@ -145,7 +145,7 @@ def details_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""
 from config import cruds
 
 inc_menu_html = " | ".join([f"<a href='/{table}/list'>{name}</a>" for table, prefix, name, hidden, extras in cruds])
-inc_menu_html += " | <a href='/report/_v_reports'>Report</a>"
+inc_menu_html += " | <a href='/reports/reports'>Report</a>"
 meta.write("templates/inc.menus.html", inc_menu_html)
 
 meta.write("templates/base.html", meta.ts("ts/base.ts"))
@@ -161,6 +161,5 @@ for table, prefix, name, hidden, extras in cruds:
     add_form(table, columns, prefix, hidden, extras, pk_id)
     edit_form(table, columns, prefix, hidden, extras, pk_id)
     details_form(table, columns, prefix, hidden, extras, pk_id)
-    # print(f"Register your BluePrint (app_{table}) in www.py")
     print(f"app.register_blueprint(app_{table}.bp)")
-print("# www.py")
+print(f"# www.py: Register your BluePrint (app_{table}) in www.py")

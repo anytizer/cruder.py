@@ -13,6 +13,7 @@ class entity_{table}(database):
         self.table = table
 
     def list(self, child_id=""):
+        # @todo filters should be in an array
         filters = ()
         select_query = "SELECT * FROM `{table}`;"
         if child_id:
@@ -37,5 +38,6 @@ class entity_{table}(database):
 
     def delete(self, {pk_id}=""):
         delete_query = "DELETE FROM `{table}` WHERE `{pk_id}`=:{pk_id};"
+        # delete_query = "UPDATE `{table}` SET is_deleted=1 WHERE `{pk_id}`=:{pk_id};"
         delete = self.query(delete_query, {"{pk_id}": {pk_id}})
         return delete

@@ -23,9 +23,11 @@ class exporter(database):
                 pass
         return "\r\n".join(_csv)
 
-    def report(self, _v_view_table="reports"):
+    def report(self, view_table="reports"):
+        # @todo safeguard the variable
+        # @todo _v_ attached. Other characters to be replaced
         db = database()
-        records = db.query(f"SELECT * FROM `{_v_view_table}`")
+        records = db.query(f"SELECT * FROM `_v_{view_table}`")
         return records
 
 
@@ -43,10 +45,10 @@ def csv_index(table):
     return response
 
 
-@bp.route("/report/<table>/", methods=["GET"])
+@bp.route("/reports/<table>/", methods=["GET"])
 def report(table):
     e = exporter()
     reports = e.report(table)
-    print(reports)
+    # print(reports)
     response = render_template("report.html", reports=reports)
     return response

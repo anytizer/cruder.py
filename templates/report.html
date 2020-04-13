@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block heading %}Reports{% endblock %}
+
+{% block content %}
+    <div class='w3-container w3-pale-yellow w3-padding'>
+        <a href="/" class="w3-green w3-btn">Home</a>
+    </div>
+
+       <table class="w3-table data">
+    <thead>
+        <tr>
+            {% for k in reports[0].keys() %}
+            <th>{{ k }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in reports %}
+        <tr>
+            {% for k in r.keys() %}
+            <td>{{r[k]}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
