@@ -9,7 +9,7 @@
         <a href="/export/{table}/" class="w3-green w3-btn">Download</a>
     </div>
 
-    <table class="w3-table w3-bordered">
+    <table class="w3-table w3-bordered data">
     <thead>
         <tr>
             __THEADS__

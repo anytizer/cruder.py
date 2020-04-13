@@ -1,0 +1,7 @@
+table.data tbody tr td {
+    whitespace: no-wrap;
+}
+
+table.data tbody tr:nth-child(odd) td {
+    background-color: #F3FAFF;
+}
