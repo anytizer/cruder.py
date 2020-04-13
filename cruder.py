@@ -4,8 +4,7 @@ import meta
 from meta import encrypt
 
 
-def routes_body(table="", columns="", prefix="", hidden=()):
-    pk_id = meta.pk(table)
+def routes_body(table="", columns="", prefix="", hidden=(), extras=(), pk_id=""):
     lookups = "".join([f"""
         kv_{h['column']}s_sql = "{h['sql']}"
         {h['column']}s = entity.query(kv_{h['column']}s_sql, ())
@@ -20,7 +19,7 @@ def routes_body(table="", columns="", prefix="", hidden=()):
     meta.write(f"apps/app_{table}.py", routes)
 
 
-def entity_body(table="", columns="", prefix=""):
+def entity_body(table="", columns="", prefix="", hidden=(), extras=(), pk_id=""):
     def _insert(columns=[]):
         insert_fields = ", ".join([f"`{field}`" for field in columns])
         insert_data = ", ".join([f":{encrypt(field)}" for field in columns])
@@ -49,18 +48,18 @@ def entity_body(table="", columns="", prefix=""):
     meta.write(f"entities/entity_{table}.py", entity_template)
 
 
-def list_form(table="", columns="", prefix="", hidden=(), extras=[]):
+def list_form(table="", columns="", prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_id")]
     columns = [column for column in columns if not column.endswith("_active")]
     columns = [column for column in columns if not column.endswith("_password")]
 
     __THEADS__ = "\r\n    ".join([f"<th>{meta.headname(field, prefix)}</th>" for field in columns])
     __THEADS__EXTRAS__ = "\r\n    ".join([f"<th>{meta.headname(field['column'], prefix)}</th>" for field in extras])
-    __THEADS__ = __THEADS__ + __THEADS__EXTRAS__
+    # __THEADS__ = __THEADS__ + __THEADS__EXTRAS__
 
     tbody = "".join([f"""<td>{{{{ d.{field} }}}}</td>""" for field in columns])
-    TBODY_EXTRAS = "".join([f"<td><a href='{field['url']}/{{{{ d.{pk_id} }}}}'>{field['column']}</td>" for field in extras])
-    tbody = tbody + TBODY_EXTRAS
+    TBODY_EXTRAS = "".join([f"<td><a href='/{table}/{field['url']}/{{{{ d.{pk_id} }}}}'>{field['column']}</td>" for field in extras])
+    # tbody = tbody + TBODY_EXTRAS
 
     list_html = meta.ts("ts/list.ts")
     list_html = list_html.replace("{table}", table)
@@ -70,10 +69,7 @@ def list_form(table="", columns="", prefix="", hidden=(), extras=[]):
     meta.write(f"templates/{table}/list.html", list_html)
 
 
-def add_form(table="", columns=[], prefix="", hidden=()):
-    # hidden = ({"column": "plant_id", "sql": "SELECT plant_id k, plant_name v FROM plants;"}, ),
-
-    pk_id = meta.pk(table)
+def add_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_id")]
     # columns = [column for column in columns if not column.endswith("_active")]
     # columns = [column for column in columns if not column.endswith("_password")]
@@ -81,7 +77,7 @@ def add_form(table="", columns=[], prefix="", hidden=()):
     htmls_add = "".join([f"""
         <div class='w3-row w3-padding'>
             <div class='w3-col l2'><label for='f_{field}'>{meta.headname(field)}</label></div>
-            <div class='w3-col l10'><input type='text' id='f_{field}' name='{encrypt(field)}' value='' placeholder='{field}' /></div>
+            <div class='w3-col l10'><input type='text' id='f_{field}' name='{meta.encrypt(field)}' value='' placeholder='{field}' /></div>
         </div>
     """ for field in columns])
 
@@ -108,7 +104,7 @@ def add_form(table="", columns=[], prefix="", hidden=()):
     meta.write(f"templates/{table}/add.html", add_form_html)
 
 
-def edit_form(table="", columns=[], prefix=""):
+def edit_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""):
     htmls_edit = "".join([f"""
         <div class='w3-padding w3-row'>
             <div class='w3-col l2'><label for='f_{field}'>{meta.headname(field)}</label></div>
@@ -122,7 +118,7 @@ def edit_form(table="", columns=[], prefix=""):
     meta.write(f"templates/{table}/edit.html", edit_html)
 
 
-def details_form(table="", columns=[], prefix=""):
+def details_form(table="", columns=[], prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_id")]
     columns = [column for column in columns if not column.endswith("_active")]
     columns = [column for column in columns if not column.endswith("_password")]
@@ -133,10 +129,15 @@ def details_form(table="", columns=[], prefix=""):
             <div class='w3-col l10'>{{{{ data.{field} }}}}</div>
         </div>
         """ for field in columns])
+    detail_extras = ""
+    if extras:
+        detail_extras = " | ".join([meta.href(table, field, pk_id) for field in extras])
+
     details_html = meta.ts("ts/details.ts")
     details_html = details_html.replace("{table}", table)
     details_html = details_html.replace("{pk_id}", pk_id)
     details_html = details_html.replace("{detail_fields}", detail_fields)
+    details_html = details_html.replace("{detail_extras}", detail_extras)
     meta.write(f"templates/{table}/details.html", details_html)
 
 
@@ -152,12 +153,12 @@ for table, prefix, name, hidden, extras in cruds:
     pk_id = meta.pk(table)
     columns = meta.columns(table)
 
-    entity_body(table, columns, prefix)
-    routes_body(table, columns, prefix, hidden)
-    list_form(table, columns, prefix, hidden, extras)
-    add_form(table, columns, prefix, hidden)
-    edit_form(table, columns, prefix)
-    details_form(table, columns, prefix)
+    entity_body(table, columns, prefix, hidden, extras, pk_id)
+    routes_body(table, columns, prefix, hidden, extras, pk_id)
+    list_form(table, columns, prefix, hidden, extras, pk_id)
+    add_form(table, columns, prefix, hidden, extras, pk_id)
+    edit_form(table, columns, prefix, hidden, extras, pk_id)
+    details_form(table, columns, prefix, hidden, extras, pk_id)
     # print(f"Register your BluePrint (app_{table}) in www.py")
     print(f"app.register_blueprint(app_{table}.bp)")
 print("# www.py")
