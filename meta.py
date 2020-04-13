@@ -1,12 +1,12 @@
 import hashlib
 import sqlite3
 
-from config import database_file
+from config import database
 # from config import table
 
 
 def columns(table):
-    connection = sqlite3.connect(database_file)
+    connection = sqlite3.connect(database)
     cursor = connection.cursor()
 
     info_sql = f"PRAGMA TABLE_INFO('{table}');"
@@ -20,7 +20,7 @@ def columns(table):
 
 
 def pk(table):
-    connection = sqlite3.connect(database_file)
+    connection = sqlite3.connect(database)
     cursor = connection.cursor()
 
     info_sql = f"PRAGMA TABLE_INFO('{table}');"

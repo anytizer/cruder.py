@@ -6,7 +6,7 @@ class database:
     connection = None
 
     def __init__(self):
-        self.connection = sqlite3.connect(config.database_file)
+        self.connection = sqlite3.connect(config.database)
         self.connection.row_factory = sqlite3.Row
         self.connection.execute("PRAGMA encoding = 'UTF-8';")
         self.connection.execute("PRAGMA count_changes = ON;")
