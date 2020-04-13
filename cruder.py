@@ -4,10 +4,19 @@ import meta
 from meta import encrypt
 
 
-def routes_body(table="", columns="", prefix=""):
+def routes_body(table="", columns="", prefix="", hidden=()):
+    pk_id = meta.pk(table)
+    lookups = "".join([f"""
+        kv_{h['column']}s_sql = "{h['sql']}"
+        {h['column']}s = entity.query(kv_{h['column']}s_sql, ())
+    """ for h in hidden])
+    lookups_assignments = ", ".join([f"{h['column']}s={h['column']}s" for h in hidden])
+
     routes = meta.ts("ts/app.ts")
     routes = routes.replace("{table}", table)
     routes = routes.replace("{pk_id}", pk_id)
+    routes = routes.replace("{LOOKUPS}", "".join(lookups))
+    routes = routes.replace("{LOOKUPS_ASSIGNMENTS}", lookups_assignments)
     meta.write(f"apps/app_{table}.py", routes)
 
 
@@ -29,15 +38,10 @@ def entity_body(table="", columns="", prefix=""):
         update_sql = f"""UPDATE `{table}` SET {update_fields} WHERE `{pk_id}`=:{pk_id};"""
         return update_sql
 
-    def _data(columns=[]):
-        return "FIELD TO REPLACE"
-
     insert_query = _insert(columns)
     update_query = _update(columns)
-    __DATA__ = _data(columns)
 
     entity_template = meta.ts("ts/entity.ts")
-    entity_template = entity_template.replace("{DATA_COLUMNS_VALUES}", __DATA__)
     entity_template = entity_template.replace("{table}", table)
     entity_template = entity_template.replace("{pk_id}", pk_id)
     entity_template = entity_template.replace("{insert_query}", insert_query)
@@ -45,18 +49,19 @@ def entity_body(table="", columns="", prefix=""):
     meta.write(f"entities/entity_{table}.py", entity_template)
 
 
-def list_form(table="", columns="", prefix=""):
+def list_form(table="", columns="", prefix="", hidden=(), extras=[]):
     columns = [column for column in columns if not column.endswith("_id")]
     columns = [column for column in columns if not column.endswith("_active")]
     columns = [column for column in columns if not column.endswith("_password")]
 
     __THEADS__ = "\r\n    ".join([f"<th>{meta.headname(field, prefix)}</th>" for field in columns])
+    __THEADS__EXTRAS__ = "\r\n    ".join([f"<th>{meta.headname(field['column'], prefix)}</th>" for field in extras])
+    __THEADS__ = __THEADS__ + __THEADS__EXTRAS__
 
-    tbody = ""
-    for field in columns:
-        tbody = tbody + f"""
-        <td>{{{{ d.{field}}}}}</td>
-"""
+    tbody = "".join([f"""<td>{{{{ d.{field} }}}}</td>""" for field in columns])
+    TBODY_EXTRAS = "".join([f"<td><a href='{field['url']}/{{{{ d.{pk_id} }}}}'>{field['column']}</td>" for field in extras])
+    tbody = tbody + TBODY_EXTRAS
+
     list_html = meta.ts("ts/list.ts")
     list_html = list_html.replace("{table}", table)
     list_html = list_html.replace("{pk_id}", pk_id)
@@ -65,7 +70,9 @@ def list_form(table="", columns="", prefix=""):
     meta.write(f"templates/{table}/list.html", list_html)
 
 
-def add_form(table="", columns=[], prefix="", hidden=[]):
+def add_form(table="", columns=[], prefix="", hidden=()):
+    # hidden = ({"column": "plant_id", "sql": "SELECT plant_id k, plant_name v FROM plants;"}, ),
+
     pk_id = meta.pk(table)
     columns = [column for column in columns if not column.endswith("_id")]
     # columns = [column for column in columns if not column.endswith("_active")]
@@ -78,15 +85,25 @@ def add_form(table="", columns=[], prefix="", hidden=[]):
         </div>
     """ for field in columns])
 
-    hidden_fields = "".join([f"<input type='hidden' name='{h}' value='' />" for h in hidden])
+    hidden_fields = "".join([f"""
+
+<div class='w3-row w3-padding'>
+    <div class='w3-col l2'>{meta.headname(h['column'])}</div>
+    <div class='w3-col l10'>
+        <select name="{h['column']}"><option value=""></option>
+            {{% for k, v in {h['column']}s %}}<option value="{{{{ k }}}}">{{{{ v }}}}</option>{{% endfor %}}
+        </select>
+    </div>
+</div>
+    """ for h in hidden])
+    # hidden_fields = "\r\n                ".join([f"<input type='hidden' name='{h}' value='' />" for h in hidden])
 
     # import meta
     add_form_html = meta.ts("ts/add.ts")
     add_form_html = add_form_html.replace("{table}", table)
     add_form_html = add_form_html.replace("{pk_id}", pk_id)
-    add_form_html = add_form_html.replace("{htmls_add}", htmls_add)
-    add_form_html = add_form_html.replace("{hidden}", hidden_fields)
-    # return add_form_html
+    add_form_html = add_form_html.replace("{__htmls_add__}", htmls_add)
+    add_form_html = add_form_html.replace("{__hidden__}", hidden_fields)
 
     meta.write(f"templates/{table}/add.html", add_form_html)
 
@@ -125,19 +142,19 @@ def details_form(table="", columns=[], prefix=""):
 
 from config import cruds
 
-inc_menu_html = " | ".join([f"<a href='/{table}/list'>{name}</a>" for table, prefix, name, hidden, flags in cruds])
+inc_menu_html = " | ".join([f"<a href='/{table}/list'>{name}</a>" for table, prefix, name, hidden, extras in cruds])
 meta.write("templates/inc.menus.html", inc_menu_html)
 
 meta.write("templates/base.html", meta.ts("ts/base.ts"))
-for table, prefix, name, hidden, flags in cruds:
+for table, prefix, name, hidden, extras in cruds:
+    os.makedirs(f"templates/{table}/", 0x777, True)
+
     pk_id = meta.pk(table)
     columns = meta.columns(table)
 
-    os.makedirs(f"templates/{table}/", 0x777, True)
-
     entity_body(table, columns, prefix)
-    routes_body(table, columns, prefix)
-    list_form(table, columns, prefix)
+    routes_body(table, columns, prefix, hidden)
+    list_form(table, columns, prefix, hidden, extras)
     add_form(table, columns, prefix, hidden)
     edit_form(table, columns, prefix)
     details_form(table, columns, prefix)
