@@ -37,7 +37,9 @@ def {table}_delete({pk_id}):
 @bp.route("/{table}/add/", methods=["GET", "POST"])
 def {table}_add():
     if request.method == "GET":
-        return render_template("{table}/add.html", guid=str(uuid.uuid4()).upper())
+        entity = entity_{table}()
+        {LOOKUPS}
+        return render_template("{table}/add.html", guid=str(uuid.uuid4()).upper(), {LOOKUPS_ASSIGNMENTS})
     elif request.method == "POST":
         data = request.form
         entity = entity_{table}()
