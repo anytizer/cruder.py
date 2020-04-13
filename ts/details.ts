@@ -8,9 +8,12 @@
 
     {detail_fields}
 
+    <!-- @todo Extra Flags -->
+
     <div class="w3-container w3-pale-red w3-padding">
         <div class="w3-left">
             <a class='w3-btn w3-red' href="/{table}/edit/{{data.{pk_id}}}">Edit</a>
+            {detail_extras}
         </div>
         <div class="w3-right">
             Are you sure? <a class='w3-btn w3-red' href="/{table}/delete/{{data.{pk_id}}}">Delete</a>
