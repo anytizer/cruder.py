@@ -55,11 +55,11 @@ def list_form(table="", columns="", prefix="", hidden=(), extras=(), pk_id=""):
 
     __THEADS__ = "\r\n    ".join([f"<th>{meta.headname(field, prefix)}</th>" for field in columns])
     __THEADS__EXTRAS__ = "\r\n    ".join([f"<th>{meta.headname(field['column'], prefix)}</th>" for field in extras])
-    # __THEADS__ = __THEADS__ + __THEADS__EXTRAS__
+    __THEADS__ = __THEADS__ + __THEADS__EXTRAS__
 
     tbody = "".join([f"""<td>{{{{ d.{field} }}}}</td>""" for field in columns])
-    TBODY_EXTRAS = "".join([f"<td><a href='/{table}/{field['url']}/{{{{ d.{pk_id} }}}}'>{field['column']}</td>" for field in extras])
-    # tbody = tbody + TBODY_EXTRAS
+    TBODY_EXTRAS = "".join([f"<td><a href='{field['url'].replace('/<>', '')}/{{{{ d.{pk_id} }}}}'>{field['column']}</td>" for field in extras])
+    tbody = tbody + TBODY_EXTRAS
 
     list_html = meta.ts("ts/list.ts")
     list_html = list_html.replace("{table}", table)
