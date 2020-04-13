@@ -10,7 +10,7 @@ bp = Blueprint("BP_CSV_IMPORT_EXPORT", __name__, template_folder="templates", st
 
 class exporter(database):
     def export(self, table=""):
-        export_query = f"SELECT * FROM `{table}` ORDER BY rowid DESC LIMIT 5000;"
+        export_query = f"SELECT * FROM `{table}` LIMIT 5000;"
         csv = self.query(export_query, ())
         columns = meta.columns(table)
 
