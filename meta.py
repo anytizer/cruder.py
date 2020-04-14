@@ -75,3 +75,4 @@ def encrypt(field=""):
     return field
 #    _hash = "H"+hashlib.sha256(field.encode()).hexdigest().upper()
 #    return _hash
+
