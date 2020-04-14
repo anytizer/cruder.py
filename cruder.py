@@ -54,6 +54,8 @@ def list_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_active")]
     columns = [column for column in columns if not column.endswith("_password")]
     columns = [column for column in columns if not column.endswith("_code")]
+    
+    columns = [column for column in columns if not column.startswith("is_")]
 
     __THEADS__ = "\r\n    ".join([f"<th>{meta.headname(field, prefix)}</th>" for field in columns])
     __THEADS__EXTRAS__ = "\r\n    ".join([f"<th>{meta.headname(field['column'], prefix)}</th>" for field in extras])
