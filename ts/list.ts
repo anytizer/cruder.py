@@ -4,11 +4,18 @@
 {% block content %}
 
     <div class='w3-container w3-pale-yellow w3-padding'>
-        <a href="/{table}/add" class="w3-green w3-btn">Add</a>
-        <a href="/import/{table}/" class="w3-green w3-btn">Import</a>
-        <a href="/export/{table}/" class="w3-green w3-btn">Download</a>
+        <form method="post" action="/{table}/search/">
+            <a href="/{table}/add/" class="w3-green w3-btn">Add</a>
+            <a href="/import/{table}/" class="w3-green w3-btn">Import</a>
+            <a href="/export/{table}/" class="w3-green w3-btn">Download</a>
+
+            <input type="submit" name="" value="Search" class="w3-green w3-btn" />
+            <input type="text" name="query" value="" placeholder="Search..." />
+        </form>
+
     </div>
 
+    <form method="post" action="/{table}/bulk/">
     <table class="w3-table w3-bordered data">
     <thead>
         <tr>
@@ -27,5 +34,6 @@
         {% endfor %}
     </tbody>
     </table>
+    </form>
 {% endblock %}
 
