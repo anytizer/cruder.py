@@ -11,7 +11,7 @@
 
         {__htmls_add__}
         
-        {__hidden__}
+        {__foreign__}
 
         <div class="w3-row w3-padding">
             <div class='w3-col l2'>&nbsp;</div>

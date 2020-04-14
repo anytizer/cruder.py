@@ -49,9 +49,11 @@ def entity_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id="")
 
 
 def list_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
+    columns = [column for column in columns if not column == "id"]
     columns = [column for column in columns if not column.endswith("_id")]
     columns = [column for column in columns if not column.endswith("_active")]
     columns = [column for column in columns if not column.endswith("_password")]
+    columns = [column for column in columns if not column.endswith("_code")]
 
     __THEADS__ = "\r\n    ".join([f"<th>{meta.headname(field, prefix)}</th>" for field in columns])
     __THEADS__EXTRAS__ = "\r\n    ".join([f"<th>{meta.headname(field['column'], prefix)}</th>" for field in extras])
@@ -81,7 +83,7 @@ def add_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
         </div>
     """ for field in columns])
 
-    hidden_fields = "".join([f"""
+    __foreign__ = "".join([f"""
 
 <div class='w3-row w3-padding'>
     <div class='w3-col l2'>{meta.headname(h['column'])}</div>
@@ -92,14 +94,12 @@ def add_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     </div>
 </div>
     """ for h in hidden])
-    # hidden_fields = "\r\n                ".join([f"<input type='hidden' name='{h}' value='' />" for h in hidden])
 
-    # import meta
     add_form_html = meta.ts("ts/add.ts")
     add_form_html = add_form_html.replace("{table}", table)
     add_form_html = add_form_html.replace("{pk_id}", pk_id)
     add_form_html = add_form_html.replace("{__htmls_add__}", htmls_add)
-    add_form_html = add_form_html.replace("{__hidden__}", hidden_fields)
+    add_form_html = add_form_html.replace("{__foreign__}", __foreign__)
 
     meta.write(f"templates/{table}/add.html", add_form_html)
 
@@ -151,6 +151,8 @@ meta.write("templates/inc.menus.html", inc_menu_html)
 meta.write("templates/base.html", meta.ts("ts/base.ts"))
 for table, prefix, name, hidden, extras in cruds:
     os.makedirs(f"templates/{table}/", 0x777, True)
+    os.makedirs(f"entities/", 0x777, True)
+    os.makedirs(f"apps/", 0x777, True)
 
     pk_id = meta.pk(table)
     columns = meta.columns(table)
