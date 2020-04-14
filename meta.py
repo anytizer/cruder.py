@@ -3,6 +3,7 @@ import sqlite3
 
 from config import database
 # from config import table
+import _capitalizer
 
 
 def columns(table):
@@ -38,7 +39,7 @@ def pk(table):
 # Column Head Name. Eg. ID for customer_id.
 def headname(column="", prefix=""):
     hn = column.replace(prefix, "").title()
-    hn = hn.replace("_", " ")
+    hn = " ".join([_capitalizer.capitalize(word) for word in hn.split("_")])
     return hn
 
 
