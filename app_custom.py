@@ -26,8 +26,7 @@ class exporter(database):
     def report(self, view_table="reports"):
         # @todo safeguard the variable
         # @todo _v_ attached. Other characters to be replaced
-        db = database()
-        records = db.query(f"SELECT * FROM `_v_{view_table}`")
+        records = self.query(f"SELECT * FROM `_v_{view_table}`")
         return records
 
 
