@@ -13,11 +13,27 @@ def {table}_index():
     return redirect("/{table}/list")
 
 
+@bp.route("/{table}/bulk/", methods=["POST"])
+def {table}_bulk():
+    # @todo To implement bulk operation
+    entity = entity_{table}()
+    data = entity.bulk()
+    return redirect("/{table}/list.html")
+
+
 @bp.route("/{table}/list/", methods=["GET"], defaults={'child_id': None})
 @bp.route("/{table}/list/<child_id>/", methods=["GET"])
 def {table}_list(child_id):
     entity = entity_{table}()
     data = entity.list(child_id)
+    return render_template("/{table}/list.html", data=data)
+
+
+@bp.route("/{table}/search/", methods=["POST"], defaults={'child_id': None})
+@bp.route("/{table}/search/<child_id>/", methods=["POST"])
+def {table}_search(child_id):
+    entity = entity_{table}()
+    data = entity.search({"child_id": child_id})
     return render_template("/{table}/list.html", data=data)
 
 
