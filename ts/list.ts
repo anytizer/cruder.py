@@ -4,14 +4,19 @@
 {% block content %}
 
     <div class='w3-container w3-pale-yellow w3-padding'>
-        <form method="post" action="/{table}/search/">
+        <div class="w3-container w3-half">
             <a href="/{table}/add/" class="w3-green w3-btn">Add</a>
             <a href="/import/{table}/" class="w3-green w3-btn">Import</a>
             <a href="/export/{table}/" class="w3-green w3-btn">Download</a>
-
-            <input type="submit" name="" value="Search" class="w3-green w3-btn" />
-            <input type="text" name="query" value="" placeholder="Search..." />
-        </form>
+        </div>
+        <div class="w3-container w3-half">
+            <div class="w3-right">
+                <form method="post" action="/{table}/search/">
+                    <input type="text" name="query" value="" placeholder="Search..." />
+                    <input type="submit" name="" value="Search" class="w3-green w3-btn" />
+                </form>
+            </div>
+        </div>
 
     </div>
 
