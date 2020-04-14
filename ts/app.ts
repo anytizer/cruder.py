@@ -22,15 +22,15 @@ def {table}_bulk():
     return redirect(T("/{table}/list.html"))
 
 
-@bp.route("/{table}/list/", methods=["GET"], defaults={'child_id': None})
+@bp.route("/{table}/list/", methods=["GET"], defaults={"child_id": None})
 @bp.route("/{table}/list/<child_id>/", methods=["GET"])
-def {table}_list(child_id):
+def {table}_list(child_id=None):
     entity = entity_{table}()
     data = entity.list(child_id)
     return render_template(T("/{table}/list.html"), data=data)
 
 
-@bp.route("/{table}/search/", methods=["POST"], defaults={'child_id': None})
+@bp.route("/{table}/search/", methods=["POST"], defaults={"child_id": None})
 @bp.route("/{table}/search/<child_id>/", methods=["POST"])
 def {table}_search(child_id):
     entity = entity_{table}()
