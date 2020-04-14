@@ -23,6 +23,11 @@ class exporter(database):
                 pass
         return "\r\n".join(_csv)
 
+    def importCSV(self, table="", csv="") -> bool:
+        # for lines, import csv
+        # self.query()
+        return True
+
     def report(self, view_table="reports"):
         # @todo safeguard the variable
         # @todo _v_ attached. Other characters to be replaced
@@ -35,8 +40,20 @@ def index():
     return "It works!"
 
 
+@bp.route("/import/<table>/", methods=["GET", "POST"])
+def import_table_csv(table):
+    if request.method == "GET":
+        return render_template("import.html", table=table)
+    elif request.method == "POST":
+        e = exporter()
+        e.importCSV(table, request.form["csv"])
+        return redirect(f"/{table}/list/")
+    else:
+        return "Not supported"
+
+
 @bp.route("/export/<table>/", methods=["GET"])
-def csv_index(table):
+def export_table_csv(table):
     e = exporter()
     csv = e.export(table)
     response = Response(csv, mimetype='text/csv')
