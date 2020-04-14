@@ -3,13 +3,14 @@ Python based CRUD Admin Panel Generator for Flask/SQLite applications
 
 ## Configurations
 `config.py` contains the database name, and CRUD Entities (table name, prefix name, Entity name, list of hidden fields to apply)
-
-## Running
-`python cruder.py`
  
 * Append the output into `www.py`.
-* Restart the Flask Server
+* Restart your Flask Server.
 
+## Order of operation
+- python builder.py
+- python crduer.py
+- python www.py
 
 ## Considerations
 - Each table has exactly one Primary Key Column, aka. ID
