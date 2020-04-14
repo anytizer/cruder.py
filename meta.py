@@ -1,13 +1,22 @@
 import hashlib
 import sqlite3
+from os import path
 
-from config import database
-# from config import table
+import config
 import _capitalizer
 
 
+# Return user templates from within __user__ dir
+def T(requested_template="") -> str:
+    user_template = config.template + "/" + requested_template.lstrip("/")
+    if path.isfile(user_template):
+        requested_template = "__user__/" + requested_template.lstrip("/")
+    print("Template request: "+requested_template, "Searching: ", user_template)
+    return requested_template
+
+
 def columns(table):
-    connection = sqlite3.connect(database)
+    connection = sqlite3.connect(config.database)
     cursor = connection.cursor()
 
     info_sql = f"PRAGMA TABLE_INFO('{table}');"
@@ -21,7 +30,7 @@ def columns(table):
 
 
 def pk(table):
-    connection = sqlite3.connect(database)
+    connection = sqlite3.connect(config.database)
     cursor = connection.cursor()
 
     info_sql = f"PRAGMA TABLE_INFO('{table}');"
