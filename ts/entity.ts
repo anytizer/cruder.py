@@ -23,6 +23,13 @@ class entity_{table}(database):
         data = self.query(select_query, filters)
         return data
 
+    def search(self, filters=()):
+        # @todo To implement search
+        # @todo filters should be in an array
+        select_query = "SELECT * FROM `{table}`;"
+        data = self.query(select_query, filters)
+        return data
+
     def add(self, data=[]):
         insert_query = """{insert_query}"""
         self.query(insert_query, data)
@@ -41,3 +48,7 @@ class entity_{table}(database):
         # delete_query = "UPDATE `{table}` SET is_deleted=1 WHERE `{pk_id}`=:{pk_id};"
         delete = self.query(delete_query, {"{pk_id}": {pk_id}})
         return delete
+
+    def bulk(self, data=()):
+        # @todo To implement bulk operation
+        return None
