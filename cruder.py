@@ -130,15 +130,15 @@ def details_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""
             <div class='w3-col l10'>{{{{ data.{field} }}}}</div>
         </div>
         """ for field in columns])
-    detail_extras = ""
+    extra_options = ""
     if extras:
-        detail_extras = " | ".join([meta.href(table, field, pk_id) for field in extras])
+        extra_options = " ".join([meta.href(table, field, pk_id) for field in extras])
 
     details_html = meta.ts("ts/details.ts")
     details_html = details_html.replace("{table}", table)
     details_html = details_html.replace("{pk_id}", pk_id)
     details_html = details_html.replace("{detail_fields}", detail_fields)
-    details_html = details_html.replace("{detail_extras}", detail_extras)
+    details_html = details_html.replace("{extra_options}", extra_options)
     meta.write(f"templates/{table}/details.html", details_html)
 
 
