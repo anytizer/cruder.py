@@ -23,11 +23,12 @@ class entity_{table}(database):
         data = self.query(select_query, filters)
         return data
 
-    def search(self, filters=()):
+    def search(self, child_id="", query=""):
         # @todo To implement search
         # @todo filters should be in an array
-        select_query = "SELECT * FROM `{table}`;"
-        data = self.query(select_query, filters)
+        filters = ()
+        search_query = "SELECT * FROM `{table}`;"
+        data = self.query(search_query, filters)
         return data
 
     def add(self, data=[]):
