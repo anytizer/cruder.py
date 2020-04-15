@@ -36,16 +36,19 @@ def custom_table_name(table_name):
 SELECT sf.column_name cn, display_name dn FROM config_showfields sf
 INNER JOIN config_tables t ON t.table_id = sf.table_id
 WHERE
-	t.table_name = '{table_name}'
-	AND sf.showon_list = '1'
+	t.table_name = ?
+	AND sf.showon_list = ?
+ORDER BY
+    sf.display_order
 ;"""
+    print(sql)
     db = database()
 
-    columns_query = db.query(sql)
+    columns_query = db.query(sql, (table_name, "1",))
     columns = ", ".join([f"`{column['cn']}`" for column in columns_query])
     heads = [column['dn'] for column in columns_query]
-    assert columns != ""
-    assert heads != ""
+    assert columns != "", "Please choose at least few columns for this table to display."
+    assert heads != [], "Cannot convert to Head Names."
     #print(heads)
 
     re_sql = f"SELECT {columns} FROM `{table_name}` LIMIT 10;"

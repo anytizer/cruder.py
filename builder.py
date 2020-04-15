@@ -28,34 +28,38 @@ CREATE TABLE "config_tables" (
 DROP TABLE IF EXISTS config_showfields;
 CREATE TABLE "config_showfields" (
 	"config_id"	TEXT NOT NULL,
-    "table_id" REFERENCES config_tables(table_id) ON UPDATE CASCADE ON DELETE CASCADE,
+	"table_id"	TEXT NOT NULL,
 	"column_name"	TEXT NOT NULL,
-    "display_name"	TEXT NOT NULL,
+	"display_name"	TEXT NOT NULL,
+	"display_order"	TEXT NOT NULL,
 	"column_datatype"	TEXT NOT NULL,
 	"showon_list"	TEXT NOT NULL,
 	"showon_edit"	TEXT NOT NULL,
 	"showon_detail"	TEXT NOT NULL,
 	"showon_insert"	TEXT NOT NULL,
 	"reserved_field"	TEXT NOT NULL,
-	UNIQUE("table_id", "column_name"),
+	FOREIGN KEY("table_id") REFERENCES "config_tables"("table_id") ON UPDATE CASCADE ON DELETE CASCADE,
+	UNIQUE("table_id","column_name"),
 	PRIMARY KEY("config_id")
 );
 
 DROP TABLE IF EXISTS config_colors;
 CREATE TABLE "config_colors" (
 	"config_id"	TEXT NOT NULL,
-    "table_id" REFERENCES config_tables(table_id) ON UPDATE CASCADE ON DELETE CASCADE,
+	"table_id"	TEXT NOT NULL,
 	"column_name"	TEXT NOT NULL,
 	"color_back"	TEXT NOT NULL,
 	"color_front"	TEXT NOT NULL,
 	"color_hover"	TEXT NOT NULL,
-	UNIQUE("table_id", "column_name"),
+	FOREIGN KEY("table_id") REFERENCES "config_tables"("table_id") ON UPDATE CASCADE ON DELETE CASCADE,
+	UNIQUE("table_id","column_name"),
 	PRIMARY KEY("config_id")
 );
 """
 
 import sqlite3
 import uuid
+from _capitalizer import capitalize
 
 
 class utils:
@@ -116,6 +120,7 @@ class utils:
         return table_id
 
     def register_showfields(self, table_id="", pragma=()):
+        display_order = 0
         for column in pragma:
             cid, name, type, notnull, dflt_value, pk = column
 
@@ -127,10 +132,11 @@ class utils:
             showon_detail = 0
             showon_insert = 0
             reserved_field = 0
-            insert_showfields = "INSERT OR IGNORE INTO config_showfields (config_id, table_id, column_name, display_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert, reserved_field) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-            display_name = column_name
+            insert_showfields = "INSERT OR IGNORE INTO config_showfields (config_id, table_id, column_name, display_name, display_order, column_datatype, showon_list, showon_edit, showon_detail, showon_insert, reserved_field) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+            display_name = capitalize(column_name)
+            display_order = display_order + 10
             data = (
-                id, table_id, column_name, display_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert,
+                id, table_id, column_name, display_name, display_order, column_datatype, showon_list, showon_edit, showon_detail, showon_insert,
                 reserved_field)
             self.connection.execute(insert_showfields, data)
 
