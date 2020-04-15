@@ -76,7 +76,6 @@ def {table}_edit({pk_id}):
         return render_template(T("/{table}/edit.html"), data=data)
     elif request.method == "POST":
         data = request.form
-
         entity = entity_{table}()
         entity.update({pk_id}, data)
 

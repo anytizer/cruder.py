@@ -30,6 +30,7 @@ CREATE TABLE "config_showfields" (
 	"config_id"	TEXT NOT NULL,
     "table_id" REFERENCES config_tables(table_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	"column_name"	TEXT NOT NULL,
+    "display_name"	TEXT NOT NULL,
 	"column_datatype"	TEXT NOT NULL,
 	"showon_list"	TEXT NOT NULL,
 	"showon_edit"	TEXT NOT NULL,
@@ -126,9 +127,10 @@ class utils:
             showon_detail = 0
             showon_insert = 0
             reserved_field = 0
-            insert_showfields = "INSERT OR IGNORE INTO config_showfields (config_id, table_id, column_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert, reserved_field) values(?, ?, ?, ?, ?, ?, ?, ?, ?);"
+            insert_showfields = "INSERT OR IGNORE INTO config_showfields (config_id, table_id, column_name, display_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert, reserved_field) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+            display_name = column_name
             data = (
-                id, table_id, column_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert,
+                id, table_id, column_name, display_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert,
                 reserved_field)
             self.connection.execute(insert_showfields, data)
 

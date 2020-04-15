@@ -18,10 +18,34 @@ def config_showfields_flag():
     assert field == request.form["id"][37:]
     # @see custom modified list.html
     config_id = request.form["id"][0:36] # ID.FIELD_NAME
-    query = f"UPDATE config_showfields set `{field}` = CASE `{field}` WHEN '1' THEN '0' ELSE '1' END WHERE config_id=?;"
+    query = f"UPDATE config_showfields set `{field}`=CASE `{field}` WHEN '1' THEN '0' ELSE '1' END WHERE config_id=?;"
     db = database()
     db.query(query, (config_id,))
     return "Success?"
+
+
+# @todo Apply for _v_ report views only
+# Draw the list of columns and show the table contents
+@bp.route("/optimized/<table_name>/", methods=["GET"])
+def custom_table_name(table_name):
+    table_name = re.sub(r'[^a-z0-9_]', '', table_name) 
+    sql = f"""
+-- List view SQL
+SELECT sf.column_name cn FROM config_showfields sf
+INNER JOIN config_tables t ON t.table_id = sf.table_id
+WHERE
+	t.table_name = '{table_name}'
+	AND sf.showon_list = '1'
+;"""
+    db = database()
+
+    columns = ", ".join([f"`{column['cn']}`" for column in db.query(sql)])
+    re_sql = f"SELECT {columns} FROM `{table_name}` LIMIT 10;"
+    print(columns, re_sql)
+    #return "That!"
+    reports = db.query(re_sql, ())
+    response = render_template("report-custom.html", reports=reports)
+    return response
 
 
 # from: gardens
