@@ -28,8 +28,7 @@ CREATE TABLE "config_tables" (
 DROP TABLE IF EXISTS config_showfields;
 CREATE TABLE "config_showfields" (
 	"config_id"	TEXT NOT NULL,
-    "table_id" TEXT NOT NULL,
-	"table_name"	TEXT NOT NULL,
+    "table_id" REFERENCES config_tables(table_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	"column_name"	TEXT NOT NULL,
 	"column_datatype"	TEXT NOT NULL,
 	"showon_list"	TEXT NOT NULL,
@@ -37,20 +36,19 @@ CREATE TABLE "config_showfields" (
 	"showon_detail"	TEXT NOT NULL,
 	"showon_insert"	TEXT NOT NULL,
 	"reserved_field"	TEXT NOT NULL,
-	UNIQUE("table_name", "column_name"),
+	UNIQUE("table_id", "column_name"),
 	PRIMARY KEY("config_id")
 );
 
 DROP TABLE IF EXISTS config_colors;
 CREATE TABLE "config_colors" (
 	"config_id"	TEXT NOT NULL,
-    "table_id" TEXT NOT NULL,
-	"table_name"	TEXT NOT NULL,
+    "table_id" REFERENCES config_tables(table_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	"column_name"	TEXT NOT NULL,
 	"color_back"	TEXT NOT NULL,
 	"color_front"	TEXT NOT NULL,
 	"color_hover"	TEXT NOT NULL,
-	UNIQUE("table_name", "column_name"),
+	UNIQUE("table_id", "column_name"),
 	PRIMARY KEY("config_id")
 );
 """
@@ -65,24 +63,25 @@ class utils:
     def __init__(self):
         database = "database/garden.db"
         self.connection = sqlite3.connect(database)
-        self.connection.execute("PRAGMA foreign_keys=on;")
-        pass
+        self.connection.execute("PRAGMA foreign_keys=ON;")
+        self.connection.execute("BEGIN TRANSACTION;")
 
     def __del__(self):
         self.connection.commit()
         self.connection.close()
-        pass
 
     def guid(self) -> str:
         return str(uuid.uuid4()).upper()
 
     def table_exists(self, table="") -> bool:
-        return False
+        exists = len(self.connection.execute(f"PRAGMA TABLE_INFO(`{table}`);").fetchall()) >= 1
+        return exists
 
     def create_table(self, table, columns=()):
         _COLUMNS = ",".join([f"`{column}` {datatype} NOT NULL" for column, datatype in columns])
         skeleton_sql = f"CREATE TABLE IF NOT EXISTS `{table}` ({_COLUMNS});"
         self.connection.execute(skeleton_sql)
+        print("Adjust the Primary Key in - ", table)
 
     def columns_match(self, table="", config={}) -> bool:
         return False
@@ -95,32 +94,31 @@ class utils:
 
     def table_id(self, table_name=""):
         sql="SELECT table_id FROM config_tables WHERE table_name=? LIMIT 1;"
-        #print(sql)
         return self.connection.execute(sql, (table_name,)).fetchone()[0]
 
     def pragma_info(self, table):
         return self.connection.execute(f"PRAGMA TABLE_INFO(`{table}`);").fetchall()
 
     def register_table(self, table="") -> str:
-        insert_table = "INSERT OR IGNORE INTO config_tables (table_id, table_name, table_prefix, pk_column, hidden_columns, extra_columns, do_crud, child_column) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
         table_prefix = ""
         pk_column = ""
         hidden_columns = ""
         extra_columns = ""
         do_crud = 1
         child_column = ""
+
+        insert_table = "INSERT OR IGNORE INTO config_tables (table_id, table_name, table_prefix, pk_column, hidden_columns, extra_columns, do_crud, child_column) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
         data = (self.guid(), table, table_prefix, pk_column, hidden_columns, extra_columns, do_crud, child_column)
         self.connection.execute(insert_table, data)
-        return data[0]
 
-    def register_showfields(self, table="", table_id="", pragma=()):
-        for c in pragma:
-            insert_pragma = "INSERT OR IGNORE INTO config_showfields (config_id, table_id, table_name, column_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert, reserved_field) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-            cid, name, type, notnull, dflt_value, pk = c
+        table_id = self.connection.execute(f"SELECT table_id FROM config_tables WHERE table_name='{table}';").fetchall()[0][0]
+        return table_id
+
+    def register_showfields(self, table_id="", pragma=()):
+        for column in pragma:
+            cid, name, type, notnull, dflt_value, pk = column
 
             id = self.guid()
-            table_id = "" # @todo Calculate on...
-            table_name = table
             column_name = name
             column_datatype = type
             showon_list = 0
@@ -128,26 +126,25 @@ class utils:
             showon_detail = 0
             showon_insert = 0
             reserved_field = 0
+            insert_showfields = "INSERT OR IGNORE INTO config_showfields (config_id, table_id, column_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert, reserved_field) values(?, ?, ?, ?, ?, ?, ?, ?, ?);"
             data = (
-                id, table_id, table_name, column_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert,
+                id, table_id, column_name, column_datatype, showon_list, showon_edit, showon_detail, showon_insert,
                 reserved_field)
-            # print(insert_pragma, data, sep="\r\n")
-            self.connection.execute(insert_pragma, data)
+            self.connection.execute(insert_showfields, data)
 
-    def register_colors(self, table, table_id="", pragma=()):
-        for c in pragma:
-            insert_pragma = "INSERT OR IGNORE INTO config_colors (config_id, table_id, table_name, column_name, color_back, color_front, color_hover) VALUES (?, ?, ?, ?, ?, ?, ?);"
-            cid, name, type, notnull, dflt_value, pk = c
+    def register_colors(self, table_id="", pragma=()):
+        for column in pragma:
+            cid, name, type, notnull, dflt_value, pk = column
 
             id = self.guid()
-            table_name = table
             column_name = name
             color_back = "#000000"
             color_front = "#FFFFFF"
             color_hover = "#F0F0F0"
-            data = (id, table_id, table_name, column_name, color_back, color_front, color_hover)
-            # print(insert_pragma, data, sep="\r\n")
-            self.connection.execute(insert_pragma, data)
+
+            insert_colors = "INSERT OR IGNORE INTO config_colors (config_id, table_id, column_name, color_back, color_front, color_hover) VALUES (?, ?, ?, ?, ?, ?);"
+            data = (id, table_id, column_name, color_back, color_front, color_hover)
+            self.connection.execute(insert_colors, data)
 
 
 u = utils()
@@ -160,14 +157,10 @@ for table, columns in configs.items():
 existing_tables = u.get_tables()
 # print(existing_tables)
 for row in existing_tables:
-    # table_row[] is the table name
     table = row[0]
-    # table_id = u.table_id(table)
-    pragma = u.pragma_info(table)
     table_id = u.register_table(table)
-    u.register_showfields(table, table_id, pragma)
-    u.register_colors(table, table_id, pragma)
-    # print(pragma)
-# CRUD table flag - for: config_showfields
+    pragma = u.pragma_info(table)
+    u.register_showfields(table_id, pragma)
+    u.register_colors(table_id, pragma)
 
 print("Successful?")
