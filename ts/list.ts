@@ -3,11 +3,12 @@
 {% block heading %}List - {table}{% endblock %}
 {% block content %}
 
-    <div class='w3-container w3-pale-yellow w3-padding'>
+    <div class='w3-row w3-pale-yellow w3-padding'>
         <div class="w3-container w3-half">
             <a href="/{table}/add/" class="w3-green w3-btn">Add</a>
             <a href="/import/{table}/" class="w3-green w3-btn">Import</a>
             <a href="/export/{table}/" class="w3-green w3-btn">Download</a>
+            <a href="/optimized/{table}/" class="w3-green w3-btn">Optimized</a>
         </div>
         <div class="w3-container w3-half">
             <div class="w3-right">
