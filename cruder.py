@@ -16,7 +16,7 @@ def routes_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id="")
     routes = routes.replace("{pk_id}", pk_id)
     routes = routes.replace("{LOOKUPS}", "".join(lookups))
     routes = routes.replace("{LOOKUPS_ASSIGNMENTS}", lookups_assignments)
-    meta.write(f"apps/app_{table}.py", routes)
+    meta.write(f"{module}/apps/app_{table}.py", routes)
 
 
 def entity_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
@@ -45,7 +45,7 @@ def entity_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id="")
     entity_template = entity_template.replace("{pk_id}", pk_id)
     entity_template = entity_template.replace("{insert_query}", insert_query)
     entity_template = entity_template.replace("{update_query}", update_query)
-    meta.write(f"entities/entity_{table}.py", entity_template)
+    meta.write(f"{module}/entities/entity_{table}.py", entity_template)
 
 
 def list_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
@@ -70,7 +70,7 @@ def list_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     list_html = list_html.replace("{pk_id}", pk_id)
     list_html = list_html.replace("__THEADS__", __THEADS__)
     list_html = list_html.replace("__TBODY__", tbody)
-    meta.write(f"templates/{table}/list.html", list_html)
+    meta.write(f"{module}/templates/{table}/list.html", list_html)
 
 
 def add_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
@@ -103,7 +103,7 @@ def add_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     add_form_html = add_form_html.replace("{__htmls_add__}", htmls_add)
     add_form_html = add_form_html.replace("{__foreign__}", __foreign__)
 
-    meta.write(f"templates/{table}/add.html", add_form_html)
+    meta.write(f"{module}/templates/{table}/add.html", add_form_html)
 
 
 def edit_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
@@ -118,7 +118,7 @@ def edit_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     edit_html = edit_html.replace("{table}", table)
     edit_html = edit_html.replace("{pk_id}", pk_id)
     edit_html = edit_html.replace("{htmls_edit}", htmls_edit)
-    meta.write(f"templates/{table}/edit.html", edit_html)
+    meta.write(f"{module}/templates/{table}/edit.html", edit_html)
 
 
 def details_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
@@ -141,20 +141,25 @@ def details_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""
     details_html = details_html.replace("{pk_id}", pk_id)
     details_html = details_html.replace("{detail_fields}", detail_fields)
     details_html = details_html.replace("{extra_options}", extra_options)
-    meta.write(f"templates/{table}/details.html", details_html)
+    meta.write(f"{module}/templates/{table}/details.html", details_html)
 
 
 from config import cruds
+from config import database
+module = os.path.basename(database)
+print(database, module)
+os.makedirs(f"{module}/templates", 0x777, True)
+
+#sys.exit()
 
 inc_menu_html = " | ".join([f"<a href='/{table}/list'>{name}</a>" for table, prefix, name, hidden, extras in cruds])
 inc_menu_html += " | <a href='/reports/reports'>Report</a>"
-meta.write("templates/inc.menus.html", inc_menu_html)
-
-meta.write("templates/base.html", meta.ts("ts/base.ts"))
+meta.write(f"{module}/templates/inc.menus.html", inc_menu_html)
+meta.write(f"{module}/templates/base.html", meta.ts("ts/base.ts"))
 for table, prefix, name, hidden, extras in cruds:
-    os.makedirs(f"templates/{table}/", 0x777, True)
-    os.makedirs(f"entities/", 0x777, True)
-    os.makedirs(f"apps/", 0x777, True)
+    os.makedirs(f"{module}/templates/{table}/", 0x777, True)
+    os.makedirs(f"{module}/entities/", 0x777, True)
+    os.makedirs(f"{module}/apps/", 0x777, True)
 
     pk_id = meta.pk(table)
     columns = meta.columns(table)

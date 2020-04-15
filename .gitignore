@@ -1,6 +1,7 @@
 /__pycache__
 /templates
 /*.db
+/*.db/
 /.idea
 /apps/__pycache__
 /entities/__pycache__
