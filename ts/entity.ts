@@ -50,6 +50,6 @@ class entity_{table}(database):
         delete = self.query(delete_query, {"{pk_id}": {pk_id}})
         return delete
 
-    def bulk(self, data=()):
-        # @todo To implement bulk operation
+    def bulk(self, operation="", ids=()):
+        # @todo To implement bulk operation on IDs
         return None
