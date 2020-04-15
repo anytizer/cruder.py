@@ -9,3 +9,5 @@
 /apps
 /database
 /tools/__pycache__
+/configs/__pycache__
+/configs

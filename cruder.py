@@ -1,4 +1,4 @@
-import config
+from configs import config
 import os
 from tools import operations, meta
 

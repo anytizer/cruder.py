@@ -48,7 +48,6 @@ ORDER BY
     heads = [column['dn'] for column in columns_query]
     assert columns != "", "Please choose at least few columns for this table to display."
     assert heads != [], "Cannot convert to Head Names."
-    #print(heads)
 
     re_sql = f"SELECT {columns} FROM `{table_name}` LIMIT 10;"
     reports = db.query(re_sql, ())

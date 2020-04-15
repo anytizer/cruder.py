@@ -1,7 +1,7 @@
 import sqlite3
 from os import path
 
-import config
+from configs import config
 from tools import _capitalizer
 
 

@@ -1,5 +1,5 @@
 import sqlite3
-import config
+from configs import config
 from tools import meta
 
 
