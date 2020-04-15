@@ -20,7 +20,7 @@ CREATE TABLE "config_tables" (
     "hidden_columns" TEXT NOT NULL,
     "extra_columns" TEXT NOT NULL,
     "do_crud"  TEXT NOT NULL,
-    "child_column" TEXT NOT NULL,
+    "parent_column" TEXT NOT NULL,
     UNIQUE("table_name"),
     PRIMARY KEY("table_id")
 );
@@ -110,10 +110,10 @@ class utils:
         hidden_columns = ""
         extra_columns = ""
         do_crud = 1
-        child_column = ""
+        parent_column = ""
 
-        insert_table = "INSERT OR IGNORE INTO config_tables (table_id, table_name, table_prefix, pk_column, hidden_columns, extra_columns, do_crud, child_column) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
-        data = (self.guid(), table, table_prefix, pk_column, hidden_columns, extra_columns, do_crud, child_column)
+        insert_table = "INSERT OR IGNORE INTO config_tables (table_id, table_name, table_prefix, pk_column, hidden_columns, extra_columns, do_crud, parent_column) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
+        data = (self.guid(), table, table_prefix, pk_column, hidden_columns, extra_columns, do_crud, parent_column)
         self.connection.execute(insert_table, data)
 
         table_id = self.connection.execute(f"SELECT table_id FROM config_tables WHERE table_name='{table}';").fetchall()[0][0]

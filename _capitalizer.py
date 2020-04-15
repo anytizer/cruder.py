@@ -8,8 +8,8 @@ caches = []
 def _cache_csv_in_words() -> []:
     csv_url = "https://raw.githubusercontent.com/anytizer/capitalizer.php/master/src/anytizer/words.csv"
     csv = requests.get(csv_url)
-    internet = csv.text.splitlines()
-    return internet
+    words = csv.text.splitlines()
+    return words
 
 
 def _capitalize(word=""):

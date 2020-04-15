@@ -22,20 +22,20 @@ def {table}_bulk():
     return redirect(T("/{table}/list.html"))
 
 
-@bp.route("/{table}/list/", methods=["GET"], defaults={"child_id": None})
-@bp.route("/{table}/list/<child_id>/", methods=["GET"])
-def {table}_list(child_id=None):
+@bp.route("/{table}/list/", methods=["GET"], defaults={"parent_id": None})
+@bp.route("/{table}/list/<parent_id>/", methods=["GET"])
+def {table}_list(parent_id=None):
     entity = entity_{table}()
-    data = entity.list(child_id)
+    data = entity.list(parent_id)
     return render_template(T("/{table}/list.html"), data=data)
 
 
-@bp.route("/{table}/search/", methods=["POST"], defaults={"child_id": None})
-@bp.route("/{table}/search/<child_id>/", methods=["POST"])
-def {table}_search(child_id):
+@bp.route("/{table}/search/", methods=["POST"], defaults={"parent_id": None})
+@bp.route("/{table}/search/<parent_id>/", methods=["POST"])
+def {table}_search(parent_id):
     entity = entity_{table}()
     query = request.form["query"]
-    data = entity.search({"child_id": child_id}, query)
+    data = entity.search({"parent_id": parent_id}, query)
     return render_template(T("/{table}/list.html"), data=data)
 
 

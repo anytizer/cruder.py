@@ -12,18 +12,18 @@ class entity_{table}(database):
         super().__init__()
         self.table = table
 
-    def list(self, child_id=""):
+    def list(self, parent_id=""):
         # @todo filters should be in an array
         filters = ()
         select_query = "SELECT * FROM `{table}`;"
-        if child_id:
-            filters = (child_id,)
-            select_query = "SELECT * FROM `{table}` WHERE `child_id`=?;"
+        if parent_id:
+            filters = (parent_id,)
+            select_query = "SELECT * FROM `{table}` WHERE `parent_id`=?;"
 
         data = self.query(select_query, filters)
         return data
 
-    def search(self, child_id="", query=""):
+    def search(self, parent_id="", query=""):
         # @todo To implement search
         # @todo filters should be in an array
         filters = ()
