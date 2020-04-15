@@ -6,12 +6,13 @@ import config
 import _capitalizer
 
 
-# Return user templates from within __user__ dir
-def T(requested_template="") -> str:
-    user_template = config.template + "/" + requested_template.lstrip("/")
+# Return user templates from within templates/__user__/ dir
+# Do NOT CRUD under name: __user__
+def custom_template(requested_template="") -> str:
+    user_template = config.template_custom.rstrip("/") + "/" + requested_template.lstrip("/")
     if path.isfile(user_template):
         requested_template = "__user__/" + requested_template.lstrip("/")
-    #print("Template request: "+requested_template, "Searching: ", user_template)
+    # print("Template request: "+requested_template, "Searching: ", user_template)
     return requested_template
 
 
@@ -22,11 +23,11 @@ def columns(table):
     info_sql = f"PRAGMA TABLE_INFO('{table}');"
     resource = cursor.execute(info_sql, ())
     data = resource.fetchall()
-    # cid, name, type, notnull, dflt_value, pk
     cols = [c[1] for c in data]
-    connection.commit()
-    connection.close()
     return cols
+    # cid, name, type, notnull, dflt_value, pk = data
+    # connection.commit()
+    # connection.close()
 
 
 def pk(table):
@@ -40,8 +41,7 @@ def pk(table):
     for cid, name, type, notnull, dflt_value, pk in data:
         if pk == 1:
             pk_column = name
-    connection.commit()
-    connection.close()
+    assert pk_column != "", "Primary key not found in this table"
     return pk_column
 
 
@@ -54,9 +54,7 @@ def headname(column="", prefix=""):
 
 def href(table="", field={}, pk_id=""):
     # "/close/<>" => "/table/close/{{data.pk_id}}"
-    # field['url'] = field['url'].lower().lstrip("/")
     field['url'] = field['url'].replace("/<>", f"/{{{{ data.{pk_id} }}}}")
-    # field['url'] = "/" + table + "/" + field['url']
     link = f"<a class='w3-btn w3-purple' href='{field['url']}'>{headname(field['column'])}</a>"
     return link
 
