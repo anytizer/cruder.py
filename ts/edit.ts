@@ -15,8 +15,8 @@
             </div>
             <div class='w3-col l10'>
                 <input type="hidden" name="{pk_id}" value="{{data.{pk_id}}}" />
-                <input type="submit" name="edit" value="Edit" class="w3-green w3-btn" />
-                <a href="/{table}">Cancel</a>
+                <input type="submit" value="Edit" class="w3-green w3-btn" />
+                <a href="/{table}/">Cancel</a>
             </div>
         </div>
     </form>
