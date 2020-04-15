@@ -1,9 +1,7 @@
-from flask import Flask, Response, render_template, request, redirect
+from flask import Response, render_template, request, redirect
 from flask import Blueprint
 
-import meta
-from database import database
-from database import exporter
+from tools.database import exporter
 
 
 bp = Blueprint("BP_COMMON_ENDPOINTS", __name__, template_folder="templates", static_folder="static")
@@ -39,6 +37,5 @@ def export_table_csv(table):
 def report(table):
     e = exporter()
     reports = e.report(table)
-    # print(reports)
     response = render_template("report.html", reports=reports)
     return response

@@ -9,7 +9,7 @@ Python based CRUD Admin Panel Generator for Flask/SQLite applications
 
 ## Order of operation
 - python builder.py
-- python crduer.py
+- python cruder.py > app.wsgi
 - python www.py
 
 ## Considerations

@@ -1,9 +1,8 @@
-import hashlib
 import sqlite3
 from os import path
 
 import config
-import _capitalizer
+from tools import _capitalizer
 
 
 # Return user templates from within templates/__user__/ dir

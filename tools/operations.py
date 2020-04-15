@@ -1,5 +1,5 @@
-import meta
-from meta import encrypt
+from tools import meta
+from tools.meta import encrypt
 
 
 def routes_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
@@ -21,7 +21,6 @@ def entity_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id="")
     def _insert(columns=()) -> str:
         insert_fields = ", ".join([f"`{field}`" for field in columns])
         insert_data = ", ".join([f":{encrypt(field)}" for field in columns])
-
         insert_sql = f"""
             INSERT INTO `{table}` (
                 {insert_fields}
@@ -73,7 +72,6 @@ def list_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     return list_html
 
 
-
 def add_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     columns = [column for column in columns if not column.endswith("_id")]
     # columns = [column for column in columns if not column.endswith("_active")]
@@ -104,8 +102,6 @@ def add_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     add_form_html = add_form_html.replace("{__htmls_add__}", htmls_add)
     add_form_html = add_form_html.replace("{__foreign__}", __foreign__)
     return add_form_html
-
-
 
 
 def edit_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):

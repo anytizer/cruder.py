@@ -1,10 +1,9 @@
 import re
 
-from flask import Flask, Response, render_template, request, redirect
+from flask import render_template, request, redirect
 from flask import Blueprint
 
-import meta
-from database import database
+from tools.database import database
 
 
 bp = Blueprint("BP_CUSTOM_ENDPOINTS", __name__, template_folder="templates", static_folder="static")

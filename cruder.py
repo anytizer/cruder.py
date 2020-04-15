@@ -1,8 +1,6 @@
 import config
-import meta
 import os
-import operations
-
+from tools import operations, meta
 
 path = config.output.rstrip("/")
 os.makedirs(f"{path}/templates", 0x777, True)

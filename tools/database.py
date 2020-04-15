@@ -1,6 +1,6 @@
 import sqlite3
 import config
-import meta
+from tools import meta
 
 
 class database:
