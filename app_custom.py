@@ -29,9 +29,11 @@ def config_showfields_flag():
 @bp.route("/optimized/<table_name>/", methods=["GET"])
 def custom_table_name(table_name):
     table_name = re.sub(r'[^a-z0-9_]', '', table_name) 
+    assert table_name != ""
+
     sql = f"""
 -- List view SQL
-SELECT sf.column_name cn FROM config_showfields sf
+SELECT sf.column_name cn, display_name dn FROM config_showfields sf
 INNER JOIN config_tables t ON t.table_id = sf.table_id
 WHERE
 	t.table_name = '{table_name}'
@@ -39,12 +41,17 @@ WHERE
 ;"""
     db = database()
 
-    columns = ", ".join([f"`{column['cn']}`" for column in db.query(sql)])
+    columns_query = db.query(sql)
+    columns = ", ".join([f"`{column['cn']}`" for column in columns_query])
+    heads = [column['dn'] for column in columns_query]
+    assert columns != ""
+    assert heads != ""
+    #print(heads)
+
     re_sql = f"SELECT {columns} FROM `{table_name}` LIMIT 10;"
-    print(columns, re_sql)
-    #return "That!"
     reports = db.query(re_sql, ())
-    response = render_template("report-custom.html", reports=reports)
+
+    response = render_template("report-custom.html", reports=reports, columns=columns, heads=heads)
     return response
 
 

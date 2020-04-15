@@ -107,7 +107,7 @@ def add_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
 
 
 def edit_form(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
-    columns = [column for column in columns if not column.endswith("_id")]
+    # columns = [column for column in columns if not column.endswith("_id")]
     htmls_edit = "".join([f"""
         <div class='w3-padding w3-row'>
             <div class='w3-col l2'><label for='f_{field}'>{meta.headname(field)}</label></div>
