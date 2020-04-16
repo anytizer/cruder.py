@@ -6,3 +6,5 @@
 /configs
 /database/*.db
 /**/*.pyc
+/apps/*.py
+/entities/*.py

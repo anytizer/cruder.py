@@ -6,6 +6,7 @@ from tools import sanitizer
 Pick up a configuration from a pool
 """
 import configs._hrs as program
+import configs._gardens as program
 
 NAME = sanitizer.sql(program.name)
 OUTPUT = program.output.replace("\\", "/").rstrip("/")

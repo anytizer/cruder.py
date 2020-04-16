@@ -6,6 +6,12 @@ from tools import capitalizer
 from tools.database import database
 
 
+def file_get_content(file=""):
+    content = ""
+    with open(file) as f:
+        content = f.read()
+    return content
+
 # Return user templates from within templates/__user__/ dir
 # Do NOT CRUD under name: __user__
 

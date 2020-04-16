@@ -1,29 +1,22 @@
+import json
+
+from tools.meta import file_get_content
 from tools.schema import schema
 from tools.registrar import registrar
 
-configs = {
-    "employees": (
-        ("employee_id", "text"),
-        ("employee_name", "text"),
-        ("employee_firstname", "text"),
-        ("employee_lastname", "text"),
-        ("employee_address", "text"),
-        ("employee_phone", "text"),
-    )
-}
+
+structure = json.loads(file_get_content("schema.json"))
 
 s = schema()
-for table, columns in configs.items():
+for table, columns in structure.items():
     if not s.table_exists(table):
         s.create_table(table, columns)
         # if not u.columns_match(table, columns):
         #    u.print_errors()
 
 r = registrar()
-with open("config.sql") as f:
-    config_sql = f.read()
-    r.connection.executescript(config_sql)
-print("Run config.sql manually.")
+r.connection.executescript(file_get_content("config.sql"))
+# print("Run config.sql manually.")
 
 for row in s.get_tables():
     table = row[0]
