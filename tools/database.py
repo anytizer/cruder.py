@@ -7,7 +7,7 @@ class database:
 
     def __init__(self):
         try:
-            self.connection = sqlite3.connect(config.database)
+            self.connection = sqlite3.connect(config.DATABASE)
         except:
             raise Exception("Could not connect to database")
 

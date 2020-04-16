@@ -11,7 +11,7 @@ from tools.database import database
 
 
 def custom_template(requested_template="") -> str:
-    user_template = config.template_custom.rstrip("/") + "/" + requested_template.lstrip("/")
+    user_template = config.CUSTOM_TEMPLATE.rstrip("/") + "/" + requested_template.lstrip("/")
     if path.isfile(user_template):
         requested_template = "__user__/" + requested_template.lstrip("/")
     # print("Template request: "+requested_template, "Searching: ", user_template)
@@ -26,7 +26,7 @@ def columns(table):
 
 
 def pk(table):
-    connection = sqlite3.connect(config.database)
+    connection = sqlite3.connect(config.DATABASE)
     cursor = connection.cursor()
 
     info_sql = f"PRAGMA TABLE_INFO('{table}');"

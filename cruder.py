@@ -2,14 +2,14 @@ from configs import config
 import os
 from tools import operations, meta
 
-path = config.output.rstrip("/")
+path = config.OUTPUT.rstrip("/")
 os.makedirs(f"{path}/templates", 0x777, True)
 
-inc_menu_html = " | ".join([f"<a href='/{table}/list'>{name}</a>" for table, prefix, name, hidden, extras in config.cruds])
+inc_menu_html = " | ".join([f"<a href='/{table}/list'>{name}</a>" for table, prefix, name, hidden, extras in config.CRUDS])
 inc_menu_html += " | <a href='/reports/reports'>Report</a>"
 meta.write(f"{path}/templates/inc.menus.html", inc_menu_html)
 meta.write(f"{path}/templates/base.html", meta.ts("ts/base.ts"))
-for table, prefix, name, hidden, extras in config.cruds:
+for table, prefix, name, hidden, extras in config.CRUDS:
     os.makedirs(f"{path}/templates/{table}/", 0x777, True)
     os.makedirs(f"{path}/entities/", 0x777, True)
     os.makedirs(f"{path}/apps/", 0x777, True)
