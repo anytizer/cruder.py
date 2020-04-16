@@ -2,11 +2,14 @@ import sqlite3
 from os import path
 
 from configs import config
-from tools import _capitalizer
+from tools import capitalizer
+from tools.database import database
 
 
 # Return user templates from within templates/__user__/ dir
 # Do NOT CRUD under name: __user__
+
+
 def custom_template(requested_template="") -> str:
     user_template = config.template_custom.rstrip("/") + "/" + requested_template.lstrip("/")
     if path.isfile(user_template):
@@ -16,17 +19,10 @@ def custom_template(requested_template="") -> str:
 
 
 def columns(table):
-    connection = sqlite3.connect(config.database)
-    cursor = connection.cursor()
-
+    db = database()
     info_sql = f"PRAGMA TABLE_INFO('{table}');"
-    resource = cursor.execute(info_sql, ())
-    data = resource.fetchall()
-    cols = [c[1] for c in data]
+    cols = [c[1] for c in db.connection.execute(info_sql).fetchall()]
     return cols
-    # cid, name, type, notnull, dflt_value, pk = data
-    # connection.commit()
-    # connection.close()
 
 
 def pk(table):
@@ -47,7 +43,7 @@ def pk(table):
 # Column Head Name. Eg. ID for customer_id.
 def headname(column="", prefix=""):
     hn = column.replace(prefix, "").title()
-    hn = " ".join([_capitalizer.capitalize(word) for word in hn.split("_")])
+    hn = " ".join([capitalizer.capitalize(word) for word in hn.split("_")])
     return hn
 
 
@@ -69,7 +65,7 @@ def write(filename="", content=""):
 
 
 def encrypt(field=""):
-    return field
-#    _hash = "H"+hashlib.sha256(field.encode()).hexdigest().upper()
-#    return _hash
-
+    _hash = field
+    # Should NOT start with numbers
+    # _hash = "H"+hashlib.sha256(field.encode()).hexdigest().upper()
+    return _hash
