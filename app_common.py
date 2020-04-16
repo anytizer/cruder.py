@@ -1,7 +1,6 @@
 from flask import Response, render_template, request, redirect
 from flask import Blueprint
-
-from tools.database import exporter
+from tools import exporter
 
 
 bp = Blueprint("BP_COMMON_ENDPOINTS", __name__, template_folder="templates", static_folder="static")
