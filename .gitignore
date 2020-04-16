@@ -1,13 +1,6 @@
-/__pycache__
+/**/__pycache__
 /templates
 /*.db
 /*.db/
 /.idea
-/apps/__pycache__
-/entities/__pycache__
-/entities
-/apps
-/database
-/tools/__pycache__
-/configs/__pycache__
 /configs

@@ -26,7 +26,8 @@ class registrar(database):
         self.query(insert_config, data)
 
         # Do NOT return data[0] as table may not be created when exists already
-        table_id = self.query("SELECT table_id FROM config_tables WHERE table_name=?;", (table, ))[0][0]
+        # Instead, query on the database
+        table_id = self.query("SELECT table_id FROM config_tables WHERE table_name=? LIMIT 1;", (table, ))[0][0]
         return table_id
 
     def register_showfields(self, table_id="", pragma=()):
