@@ -2,7 +2,7 @@ from configs import config
 import os
 from tools import operations, meta
 
-path = config.OUTPUT
+path = "." # config.OUTPUT
 os.makedirs(f"{path}/templates/__user__", 0x777, True)
 
 inc_menu_html = " | ".join([f"<a href='/{table}/list'>{name}</a>" for table, prefix, name, hidden, extras in config.CRUDS])
@@ -16,12 +16,14 @@ meta.write(f"{path}/config.py", config_body)
 print(f"""#!/bin/python
 import sys
 sys.path.insert(0, "d:/Desktop/cruder.py/cruder.py")
+sys.path.insert(0, "d:/Desktop/cruder.py/sites/hrs.site")
 
 from apps import *
 
 from flask import Flask
 app = Flask(__name__)
 
+from commons import app_common, app_custom
 """)
 
 for table, prefix, name, hidden, extras in config.CRUDS:
@@ -51,7 +53,7 @@ for table, prefix, name, hidden, extras in config.CRUDS:
     meta.write(f"{path}/templates/{table}/details.html", details_html)
 
     print(f"app.register_blueprint(app_{table}.bp)")
-# touch /templates/entity/{list.html,edit.html,add.html}
+# touch /templates/entity/{details.html,list.html,edit.html,add.html}
 web = """
 app.register_blueprint(app_common.bp)
 app.register_blueprint(app_custom.bp)

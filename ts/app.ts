@@ -1,5 +1,4 @@
 import os
-sys.path.insert(1, '{OUTPUT}')
 
 import uuid
 from flask import Flask, Response, render_template, request, redirect

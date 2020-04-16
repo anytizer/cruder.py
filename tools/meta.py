@@ -30,7 +30,6 @@ def pk(table):
     cursor = connection.cursor()
 
     info_sql = f"PRAGMA TABLE_INFO(`{table}`);"
-    print(info_sql)
     resource = cursor.execute(info_sql, ())
     data = resource.fetchall()
     pk_column = ""

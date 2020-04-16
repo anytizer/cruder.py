@@ -1,5 +1,5 @@
 @echo off
-python builder.py
-python cruder.py
+REM python builder.py
+REM python cruder.py
 python www.py
 pause

@@ -27,8 +27,3 @@ class database:
         data = cursor.fetchall()
         return data
 
-    def row(self, sql="", parameters=[]) -> []:
-        cursor = self.connection.cursor()
-        cursor.execute(sql, parameters)
-        data = cursor.fetchone()
-        return data

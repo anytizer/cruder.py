@@ -2,7 +2,7 @@ from tools.schema import schema
 from tools.registrar import registrar
 
 configs = {
-    "employees1": (
+    "employees": (
         ("employee_id", "text"),
         ("employee_name", "text"),
         ("employee_firstname", "text"),
