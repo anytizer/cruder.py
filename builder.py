@@ -1,8 +1,8 @@
-from tools.builder_utils import builder_utils
+from tools.schema import schema
 from tools.registrar import registrar
 
 configs = {
-    "employees": (
+    "employees1": (
         ("employee_id", "text"),
         ("employee_name", "text"),
         ("employee_firstname", "text"),
@@ -12,18 +12,23 @@ configs = {
     )
 }
 
-u = builder_utils()
+s = schema()
 for table, columns in configs.items():
-    if not u.table_exists(table):
-        u.create_table(table, columns)
+    if not s.table_exists(table):
+        s.create_table(table, columns)
         # if not u.columns_match(table, columns):
         #    u.print_errors()
 
 r = registrar()
-for row in u.get_tables():
+with open("config.sql") as f:
+    config_sql = f.read()
+    r.connection.executescript(config_sql)
+print("Run config.sql manually.")
+
+for row in s.get_tables():
     table = row[0]
     table_id = r.register_table(table)
-    pragma = u.pragma_info(table)
+    pragma = s.pragma_info(table)
     r.register_showfields(table_id, pragma)
     r.register_colors(table_id, pragma)
 

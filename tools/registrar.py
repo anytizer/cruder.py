@@ -3,7 +3,7 @@ from tools.database import database
 from tools.provider import provider
 
 
-# Registers configuration tables
+# Registers configuration tables on a nominated database
 class registrar(database):
     def __init__(self):
         super().__init__()

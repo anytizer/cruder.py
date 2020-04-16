@@ -29,7 +29,8 @@ def pk(table):
     connection = sqlite3.connect(config.DATABASE)
     cursor = connection.cursor()
 
-    info_sql = f"PRAGMA TABLE_INFO('{table}');"
+    info_sql = f"PRAGMA TABLE_INFO(`{table}`);"
+    print(info_sql)
     resource = cursor.execute(info_sql, ())
     data = resource.fetchall()
     pk_column = ""

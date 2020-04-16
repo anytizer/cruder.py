@@ -15,7 +15,7 @@ class database:
         self.connection.execute("PRAGMA encoding = 'UTF-8';")
         self.connection.execute("PRAGMA count_changes = ON;")
         self.connection.execute("PRAGMA foreign_keys = ON;")
-        self.connection.execute("BEGIN TRANSACTION;")
+        # self.connection.execute("BEGIN TRANSACTION;")
 
     def __del__(self):
         self.connection.commit()

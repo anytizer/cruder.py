@@ -1,8 +1,7 @@
-import re
-
 from flask import render_template, request, redirect
 from flask import Blueprint
 
+from tools import sanitizer
 from tools.database import database
 
 
@@ -12,7 +11,7 @@ bp = Blueprint("BP_CUSTOM_ENDPOINTS", __name__, template_folder="templates", sta
 # from: configurator
 @bp.route("/config_showfields/flag/", methods=["POST"])
 def config_showfields_flag():
-    field = re.sub(r'[^a-z0-9_]', '', request.form["field"]) # SQL Safety
+    field = sanitizer.sql(request.form["field"])
     assert field == request.form["field"]
     assert field == request.form["id"][37:]
     # @see custom modified list.html
@@ -27,7 +26,7 @@ def config_showfields_flag():
 # Draw the list of columns and show the table contents
 @bp.route("/optimized/<table_name>/", methods=["GET"])
 def custom_table_name(table_name):
-    table_name = re.sub(r'[^a-z0-9_]', '', table_name) 
+    table_name = sanitizer.sql(table_name)
     assert table_name != ""
 
     sql = f"""
