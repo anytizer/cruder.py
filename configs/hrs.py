@@ -1,6 +1,6 @@
-output = "hrs.site/"
-template_custom = "hrs.site/templates/__user__/"
-database = "hrs.site/database/hrs.db"
+output = "hrs/"
+template_custom = "hrs/templates/__user__/"
+database = "hrs/database/hrs.db"
 cruds = (
     ("employees", "employee_", "Employees", (), ()),
     ("config_tables", "", "Tables", (), (

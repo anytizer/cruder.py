@@ -5,3 +5,4 @@
 /.idea
 /configs
 /database/*.db
+/**/*.pyc

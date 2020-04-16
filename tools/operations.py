@@ -2,6 +2,12 @@ from tools import meta
 from tools.meta import encrypt
 
 
+def config():
+    return """#/bin/python
+import sys
+sys.path.insert(1, '{OUTPUT}')
+"""
+
 def routes_body(table="", columns=(), prefix="", hidden=(), extras=(), pk_id=""):
     lookups = "".join([f"""
         kv_{h['column']}s_sql = "{h['sql']}"

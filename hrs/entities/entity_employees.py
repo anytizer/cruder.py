@@ -1,6 +1,6 @@
 import sqlite3
 from flask import request, redirect
-from database import database
+from tools.database import database
 import uuid
 
 

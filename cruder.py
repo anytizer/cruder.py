@@ -9,6 +9,12 @@ inc_menu_html = " | ".join([f"<a href='/{table}/list'>{name}</a>" for table, pre
 inc_menu_html += " | <a href='/reports/reports'>Report</a>"
 meta.write(f"{path}/templates/inc.menus.html", inc_menu_html)
 meta.write(f"{path}/templates/base.html", meta.ts("ts/base.ts"))
+
+config_body = operations.config()
+config_body = config_body.replace("{OUTPUT}", config.OUTPUT)
+meta.write(f"{path}/config.py", config_body)
+print("import config")
+
 for table, prefix, name, hidden, extras in config.CRUDS:
     os.makedirs(f"{path}/templates/{table}/", 0x777, True)
     os.makedirs(f"{path}/entities/", 0x777, True)
