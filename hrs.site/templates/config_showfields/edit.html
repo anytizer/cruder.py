@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Edit - config_showfields{% endblock %}
+{% block heading %}Edit - config_showfields{% endblock %}
+{% block content %}
+
+    <div class='w3-container w3-pale-yellow w3-padding'>
+        <a href="/config_showfields/list" class="w3-green w3-btn">Back</a>
+    </div>
+
+    <form name='edit' action='/config_showfields/edit/{{data.config_id}}/' method="post">
+        
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_config_id'>Config ID</label></div>
+            <div class='w3-col l2'><input type='text' id='f_config_id' name='config_id' value='{{ data.config_id }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_table_id'>Table ID</label></div>
+            <div class='w3-col l2'><input type='text' id='f_table_id' name='table_id' value='{{ data.table_id }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_column_name'>Column Name</label></div>
+            <div class='w3-col l2'><input type='text' id='f_column_name' name='column_name' value='{{ data.column_name }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_display_name'>Display Name</label></div>
+            <div class='w3-col l2'><input type='text' id='f_display_name' name='display_name' value='{{ data.display_name }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_display_order'>Display Order</label></div>
+            <div class='w3-col l2'><input type='text' id='f_display_order' name='display_order' value='{{ data.display_order }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_column_datatype'>Column Datatype</label></div>
+            <div class='w3-col l2'><input type='text' id='f_column_datatype' name='column_datatype' value='{{ data.column_datatype }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_showon_list'>Showon List</label></div>
+            <div class='w3-col l2'><input type='text' id='f_showon_list' name='showon_list' value='{{ data.showon_list }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_showon_edit'>Showon Edit</label></div>
+            <div class='w3-col l2'><input type='text' id='f_showon_edit' name='showon_edit' value='{{ data.showon_edit }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_showon_detail'>Showon Detail</label></div>
+            <div class='w3-col l2'><input type='text' id='f_showon_detail' name='showon_detail' value='{{ data.showon_detail }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_showon_insert'>Showon Insert</label></div>
+            <div class='w3-col l2'><input type='text' id='f_showon_insert' name='showon_insert' value='{{ data.showon_insert }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_reserved_field'>Reserved Field</label></div>
+            <div class='w3-col l2'><input type='text' id='f_reserved_field' name='reserved_field' value='{{ data.reserved_field }}' /></div>
+        </div>
+    
+        <div class="w3-row w3-padding">
+            <div class='w3-col l2'>
+                &nbsp;
+            </div>
+            <div class='w3-col l10'>
+                <input type="hidden" name="config_id" value="{{data.config_id}}" />
+                <input type="submit" value="Edit" class="w3-green w3-btn" />
+                <a href="/config_showfields/">Cancel</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

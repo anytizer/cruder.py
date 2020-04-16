@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Edit - employees{% endblock %}
+{% block heading %}Edit - employees{% endblock %}
+{% block content %}
+
+    <div class='w3-container w3-pale-yellow w3-padding'>
+        <a href="/employees/list" class="w3-green w3-btn">Back</a>
+    </div>
+
+    <form name='edit' action='/employees/edit/{{data.employee_id}}/' method="post">
+        
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_employee_id'>Employee ID</label></div>
+            <div class='w3-col l2'><input type='text' id='f_employee_id' name='employee_id' value='{{ data.employee_id }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_employee_name'>Employee Name</label></div>
+            <div class='w3-col l2'><input type='text' id='f_employee_name' name='employee_name' value='{{ data.employee_name }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_employee_firstname'>Employee Firstname</label></div>
+            <div class='w3-col l2'><input type='text' id='f_employee_firstname' name='employee_firstname' value='{{ data.employee_firstname }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_employee_lastname'>Employee Lastname</label></div>
+            <div class='w3-col l2'><input type='text' id='f_employee_lastname' name='employee_lastname' value='{{ data.employee_lastname }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_employee_address'>Employee Address</label></div>
+            <div class='w3-col l2'><input type='text' id='f_employee_address' name='employee_address' value='{{ data.employee_address }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_employee_phone'>Employee Phone</label></div>
+            <div class='w3-col l2'><input type='text' id='f_employee_phone' name='employee_phone' value='{{ data.employee_phone }}' /></div>
+        </div>
+    
+        <div class="w3-row w3-padding">
+            <div class='w3-col l2'>
+                &nbsp;
+            </div>
+            <div class='w3-col l10'>
+                <input type="hidden" name="employee_id" value="{{data.employee_id}}" />
+                <input type="submit" value="Edit" class="w3-green w3-btn" />
+                <a href="/employees/">Cancel</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

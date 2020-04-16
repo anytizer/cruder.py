@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}List - employees{% endblock %}
+{% block heading %}List - employees{% endblock %}
+{% block content %}
+
+    <div class='w3-row w3-pale-yellow w3-padding'>
+        <div class="w3-container w3-half">
+            <a href="/employees/add/" class="w3-green w3-btn">Add</a>
+            <a href="/import/employees/" class="w3-green w3-btn">Import</a>
+            <a href="/export/employees/" class="w3-green w3-btn">Download</a>
+            <a href="/optimized/employees/" class="w3-green w3-btn">Optimized</a>
+        </div>
+        <div class="w3-container w3-half">
+            <div class="w3-right">
+                <form method="post" action="/employees/search/">
+                    <input type="text" name="query" value="" placeholder="Search..." />
+                    <input type="submit" name="" value="Search" class="w3-green w3-btn" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" action="/employees/bulk/">
+    <table class="w3-table w3-bordered data">
+    <thead>
+        <tr>
+            <th>Name</th><th>Firstname</th><th>Lastname</th><th>Address</th><th>Phone</th>
+            <th>Edit</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in data %}
+        <tr>
+            <td>{{ d.employee_name }}</td><td>{{ d.employee_firstname }}</td><td>{{ d.employee_lastname }}</td><td>{{ d.employee_address }}</td><td>{{ d.employee_phone }}</td>
+            <td><a href='/employees/edit/{{ d.employee_id }}'>Edit<a></td>
+            <td><a href='/employees/details/{{ d.employee_id }}'>Details<a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    </form>
+{% endblock %}
+

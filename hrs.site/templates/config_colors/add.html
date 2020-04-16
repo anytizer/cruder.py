@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Add - config_colors{% endblock %}
+{% block heading %}Add - config_colors{% endblock %}
+
+{% block content %}
+    <div class='w3-container w3-pale-yellow w3-padding'>
+        <a href="/config_colors/list" class="w3-green w3-btn">Back</a>
+    </div>
+
+    <form name='add' action='/config_colors/add/' method='post' onsubmit="document.getElementById('config_colors-submit').disabled=true; return true;" autocomplete="off">
+
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_column_name'>Column Name</label></div>
+            <div class='w3-col l10'><input type='text' id='f_column_name' name='column_name' value='' placeholder='column_name' /></div>
+        </div>
+    
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_color_back'>Color Back</label></div>
+            <div class='w3-col l10'><input type='text' id='f_color_back' name='color_back' value='' placeholder='color_back' /></div>
+        </div>
+    
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_color_front'>Color Front</label></div>
+            <div class='w3-col l10'><input type='text' id='f_color_front' name='color_front' value='' placeholder='color_front' /></div>
+        </div>
+    
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_color_hover'>Color Hover</label></div>
+            <div class='w3-col l10'><input type='text' id='f_color_hover' name='color_hover' value='' placeholder='color_hover' /></div>
+        </div>
+    
+        
+        
+
+        <div class="w3-row w3-padding">
+            <div class='w3-col l2'>&nbsp;</div>
+            <div class='w3-col l10'>
+                <input type="hidden" name="config_id" value="{{ guid }}" />
+                <input type="submit" id="config_colors-submit" name="" value="Add" class="w3-green w3-btn" />
+                <a href="/config_colors">Cancel</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

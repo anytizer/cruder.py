@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}List - config_showfields{% endblock %}
+{% block heading %}List - config_showfields{% endblock %}
+{% block content %}
+
+    <div class='w3-row w3-pale-yellow w3-padding'>
+        <div class="w3-container w3-half">
+            <a href="/config_showfields/add/" class="w3-green w3-btn">Add</a>
+            <a href="/import/config_showfields/" class="w3-green w3-btn">Import</a>
+            <a href="/export/config_showfields/" class="w3-green w3-btn">Download</a>
+            <a href="/optimized/config_showfields/" class="w3-green w3-btn">Optimized</a>
+        </div>
+        <div class="w3-container w3-half">
+            <div class="w3-right">
+                <form method="post" action="/config_showfields/search/">
+                    <input type="text" name="query" value="" placeholder="Search..." />
+                    <input type="submit" name="" value="Search" class="w3-green w3-btn" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" action="/config_showfields/bulk/">
+    <table class="w3-table w3-bordered data">
+    <thead>
+        <tr>
+            <th>Column Name</th><th>Display Name</th><th>Display Order</th><th>Column Datatype</th><th>Showon List</th><th>Showon Edit</th><th>Showon Detail</th><th>Showon Insert</th><th>Reserved Field</th>
+            <th>Edit</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in data %}
+        <tr>
+            <td>{{ d.column_name }}</td><td>{{ d.display_name }}</td><td>{{ d.display_order }}</td><td>{{ d.column_datatype }}</td><td>{{ d.showon_list }}</td><td>{{ d.showon_edit }}</td><td>{{ d.showon_detail }}</td><td>{{ d.showon_insert }}</td><td>{{ d.reserved_field }}</td>
+            <td><a href='/config_showfields/edit/{{ d.config_id }}'>Edit<a></td>
+            <td><a href='/config_showfields/details/{{ d.config_id }}'>Details<a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    </form>
+{% endblock %}
+

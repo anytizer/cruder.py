@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Edit - config_tables{% endblock %}
+{% block heading %}Edit - config_tables{% endblock %}
+{% block content %}
+
+    <div class='w3-container w3-pale-yellow w3-padding'>
+        <a href="/config_tables/list" class="w3-green w3-btn">Back</a>
+    </div>
+
+    <form name='edit' action='/config_tables/edit/{{data.table_id}}/' method="post">
+        
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_table_id'>Table ID</label></div>
+            <div class='w3-col l2'><input type='text' id='f_table_id' name='table_id' value='{{ data.table_id }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_table_name'>Table Name</label></div>
+            <div class='w3-col l2'><input type='text' id='f_table_name' name='table_name' value='{{ data.table_name }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_table_prefix'>Table Prefix</label></div>
+            <div class='w3-col l2'><input type='text' id='f_table_prefix' name='table_prefix' value='{{ data.table_prefix }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_pk_column'>PK Column</label></div>
+            <div class='w3-col l2'><input type='text' id='f_pk_column' name='pk_column' value='{{ data.pk_column }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_hidden_columns'>Hidden Columns</label></div>
+            <div class='w3-col l2'><input type='text' id='f_hidden_columns' name='hidden_columns' value='{{ data.hidden_columns }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_extra_columns'>Extra Columns</label></div>
+            <div class='w3-col l2'><input type='text' id='f_extra_columns' name='extra_columns' value='{{ data.extra_columns }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_do_crud'>Do CRUD</label></div>
+            <div class='w3-col l2'><input type='text' id='f_do_crud' name='do_crud' value='{{ data.do_crud }}' /></div>
+        </div>
+    
+        <div class='w3-padding w3-row'>
+            <div class='w3-col l2'><label for='f_parent_column'>Parent Column</label></div>
+            <div class='w3-col l2'><input type='text' id='f_parent_column' name='parent_column' value='{{ data.parent_column }}' /></div>
+        </div>
+    
+        <div class="w3-row w3-padding">
+            <div class='w3-col l2'>
+                &nbsp;
+            </div>
+            <div class='w3-col l10'>
+                <input type="hidden" name="table_id" value="{{data.table_id}}" />
+                <input type="submit" value="Edit" class="w3-green w3-btn" />
+                <a href="/config_tables/">Cancel</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

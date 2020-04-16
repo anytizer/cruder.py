@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Add - employees{% endblock %}
+{% block heading %}Add - employees{% endblock %}
+
+{% block content %}
+    <div class='w3-container w3-pale-yellow w3-padding'>
+        <a href="/employees/list" class="w3-green w3-btn">Back</a>
+    </div>
+
+    <form name='add' action='/employees/add/' method='post' onsubmit="document.getElementById('employees-submit').disabled=true; return true;" autocomplete="off">
+
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_employee_name'>Employee Name</label></div>
+            <div class='w3-col l10'><input type='text' id='f_employee_name' name='employee_name' value='' placeholder='employee_name' /></div>
+        </div>
+    
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_employee_firstname'>Employee Firstname</label></div>
+            <div class='w3-col l10'><input type='text' id='f_employee_firstname' name='employee_firstname' value='' placeholder='employee_firstname' /></div>
+        </div>
+    
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_employee_lastname'>Employee Lastname</label></div>
+            <div class='w3-col l10'><input type='text' id='f_employee_lastname' name='employee_lastname' value='' placeholder='employee_lastname' /></div>
+        </div>
+    
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_employee_address'>Employee Address</label></div>
+            <div class='w3-col l10'><input type='text' id='f_employee_address' name='employee_address' value='' placeholder='employee_address' /></div>
+        </div>
+    
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'><label for='f_employee_phone'>Employee Phone</label></div>
+            <div class='w3-col l10'><input type='text' id='f_employee_phone' name='employee_phone' value='' placeholder='employee_phone' /></div>
+        </div>
+    
+        
+        
+
+        <div class="w3-row w3-padding">
+            <div class='w3-col l2'>&nbsp;</div>
+            <div class='w3-col l10'>
+                <input type="hidden" name="employee_id" value="{{ guid }}" />
+                <input type="submit" id="employees-submit" name="" value="Add" class="w3-green w3-btn" />
+                <a href="/employees">Cancel</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

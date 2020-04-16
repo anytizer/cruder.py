@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Details - config_showfields{% endblock %}
+{% block heading %}Details - config_showfields{% endblock %}
+{% block content %}
+    <div class='w3-container w3-pale-yellow w3-padding'>
+        <a href="/config_showfields/list" class="w3-green w3-btn">Back</a>
+        
+    </div>
+
+    
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Column Name</div>
+            <div class='w3-col l10'>{{ data.column_name }}</div>
+        </div>
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Display Name</div>
+            <div class='w3-col l10'>{{ data.display_name }}</div>
+        </div>
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Display Order</div>
+            <div class='w3-col l10'>{{ data.display_order }}</div>
+        </div>
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Column Datatype</div>
+            <div class='w3-col l10'>{{ data.column_datatype }}</div>
+        </div>
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Showon List</div>
+            <div class='w3-col l10'>{{ data.showon_list }}</div>
+        </div>
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Showon Edit</div>
+            <div class='w3-col l10'>{{ data.showon_edit }}</div>
+        </div>
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Showon Detail</div>
+            <div class='w3-col l10'>{{ data.showon_detail }}</div>
+        </div>
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Showon Insert</div>
+            <div class='w3-col l10'>{{ data.showon_insert }}</div>
+        </div>
+        
+        <div class='w3-row w3-padding'>
+            <div class='w3-col l2'>Reserved Field</div>
+            <div class='w3-col l10'>{{ data.reserved_field }}</div>
+        </div>
+        
+
+    <div class="w3-container w3-pale-red w3-padding">
+        <div class="w3-left">
+            <a class='w3-btn w3-red' href="/config_showfields/edit/{{data.config_id}}">Edit</a>
+
+        </div>
+        <div class="w3-right">
+            Are you sure? <a class='w3-btn w3-red' href="/config_showfields/delete/{{data.config_id}}">Delete</a>
+        </div>
+    </div>
+
+{% endblock %}
